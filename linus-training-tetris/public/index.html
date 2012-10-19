@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tetris</title>
+  <script type="text/javascript" src="/jquery.js"></script>
+  <script type="text/javascript" src="/Tetris.coffee"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <style type="text/css">
+
+    canvas {
+      border: 8px solid black;
+    }
+
+  </style>
+</head>
+<body>
+
+
+
+
+
+
+  <script type="text/javascript">
+
+    boards = [
+      new Tetris,
+      new Tetris
+    ];
+
+    socket = io.connect();
+
+    socket.on('state', function (data) {
+      window.state = data;
+      for(var i=0; i<data.length; i++) {
+        boards[i].draw(data[i]);
+      }
+    });
+
+  </script>
+
+</body>
+</html>
