@@ -1,28 +1,27 @@
 express = require 'express'
 require "coffee-script"
+app = express()
+server = require('http').createServer app
+io = require('socket.io').listen server
+stylus = require 'stylus'
+nib = require 'nib'
 routes = require './routes'
-app = module.exports = express()
-io = require('socket.io').listen app
-
-compile = (str, path) ->
-  return stylus(str).set('filename', path).use(nib())
+application = require './application'
 
 app.configure ->
   app.set 'views', __dirname + '/views'
   app.set 'view engine', 'jade'
+  app.set 'view options', { layout: false } 
+  app.use stylus.middleware { src: __dirname + '/public', compile: (str, path) -> stylus(str).set('filename', path).use nib() }
   app.use express.bodyParser()
   app.use express.methodOverride()
-  app.use app.router
   app.use express.static __dirname + '/public'
 
-app.configure 'development', ->
-  app.use express.errorHandler { dumpExceptions: true, showStack: true }
-
-app.configure 'production', ->
-  app.use express.errorHandler()
+app.configure 'development', -> app.use express.errorHandler { dumpExceptions: true, showStack: true }
+app.configure 'production', -> app.use express.errorHandler()
 
 routes app
 
-if (require.main == module)
-  app.listen(3000)
+server.listen(3000)
+application(io)
 
