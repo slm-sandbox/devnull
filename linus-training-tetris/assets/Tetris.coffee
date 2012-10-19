@@ -1,34 +1,46 @@
 
 B = 16
 
-randomcolor = ->
-  [
-    '#00FF00',
-    '#00EE00',
-    '#00FF11',
-    '#00EE11',
-    '#11FF00',
-    '#11EE00',
-    '#00FF33',
-    '#33FF00',
-  ][Math.floor Math.random 8]
-
 class Tetris
 
-  constructor: ->
-    @canvas = $('<canvas />').prop(width: 9*B, height: 16*B).appendTo 'body'
+  constructor: (@socket, @i = null)->
+
+    $div = $('<div />')
+    @score = $('<span />').appendTo $div
+    $div.append '<br />'
+    @canvas = $('<canvas />').prop(width: 9*B, height: 16*B).appendTo $div
+    @ctx = @canvas[0].getContext '2d'
+    @ctx.scale B, B
+    $div.appendTo 'body'
+
+    socket.on 'state', (data)=>
+      @draw(data[@i]) unless @i is null
+
+    if @i is null
+      @socket.emit 'join'
+      @socket.on 'you-are', (n)=>
+        $div.addClass 'tetris-' + (@i = n)
+        $div.find('button').remove()
+        $b1 = $('<button>&lt;-</button>').on 'click', -> socket.emit 'move', -1
+        $b2 = $('<button>-&gt;</button>').on 'click', -> socket.emit 'move', +1
+        $b3 = $('<button>rot</button>').on 'click', -> socket.emit 'rotate', +1
+        $div.append('<br />').append($b1).append(' ').append($b3).append(' ').append $b2
+    else
+      $div.addClass 'tetris-' + @i
 
   draw: (state)->
-    ctx = @canvas[0].getContext '2d'
-    ctx.scale B, B
-    ctx.clearRect 0, 0, 9, 16
+    return unless state
+    @score.text (if state.over then " !! #{state.score} !! " else state.score)
+    @ctx.clearRect 0, 0, 9, 16
     for p in state.ps
-      ctx.fillStyle = randomcolor()
+      @ctx.fillStyle = p.color
       for s in p.subs
-        ctx.fillRect s.x, s.y, 1, 1
-    ctx.fillStyle = '#0033FF'
-    for s in state.p.subs
-      ctx.fillRect s.x, s.y, 1, 1
+        @ctx.fillRect p.x + s.x, p.y + s.y, 1, 1
+    @ctx.fillStyle = '#0033FF'
+    if state.p
+      for s in state.p.subs
+        @ctx.fillRect state.p.x + s.x, state.p.y + s.y, 1, 1
+
 
 
 
