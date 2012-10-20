@@ -1,3 +1,42 @@
+getAdjacentTiles = (player, monster)->
+  mX = monster.x
+  mY = monster.y
+
+  adjTiles = []
+  adjTiles.push [mX-1, mY]
+  adjTiles.push [mX+1, mY]
+  adjTiles.push [mX, mY-1]
+  adjTiles.push [mX, mY+1]
+
+  return adjTiles
+
+closestTile = (tiles, player, board)->
+  distances = []
+  for tile in tiles
+    unless board[tile[1]][tile[0]] == 0
+      a = player.x - tile[0]
+      b = player.y - tile[1] 
+      distances.push [tile, Math.sqrt(a*a+b*b)]
+  min = [null, Infinity]
+  for d in distances
+    if d[1] < min[1]
+      min = d
+
+  return min[0]
+
+farthestTile = (tiles, player, board)->
+  distances = []
+  for tile in tiles
+    unless board[tile[1]][tile[0]] == 0
+      a = player.x - tile[0]
+      b = player.y - tile[1] 
+      distances.push [tile, Math.sqrt(a*a+b*b)]
+  max = [null, 0]
+  for d in distances
+    if d[1] > max[1]
+      max = d
+
+  return max[0]
 
 $ ->
   A = 31
