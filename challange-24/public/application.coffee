@@ -1,3 +1,5 @@
+getProcessInformation = ->
 
+readValue = ->
 
-
+writeValue = ->
