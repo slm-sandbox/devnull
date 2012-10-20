@@ -29,7 +29,7 @@ module.exports = (io) ->
     console.log('next piece')
     console.log(current.coords())
     current.coords().map (a) ->
-      board[a[1]][a[0]] = 1
+      board[a[1]][a[0]] = 1 if a[1] < board.length
     init_current()
     game_over() if collision()
 
@@ -39,13 +39,19 @@ module.exports = (io) ->
       r = true if a[1] == 0
     unless r
       current.coords().map (a) ->
-        r = true if (a[1] < board.length and board[a[1] - 1][a[0]] == 1) 
+        r = true if (a[1] <= board.length and board[a[1] - 1][a[0]] == 1) 
     r
 
   game_over = ->
     clearInterval(_loop)
     console.log("       ******** GAME OVER ********")
 
+  io.sockets.on 'connection', (socket) ->
+    console.log 'connect'
+    socket.emit 'news', { hello: 'world' }
+    socket.on 'other', (data) ->
+      console.log data
+   
   step = ->
     console.log board
     console.log current.piece
@@ -55,5 +61,5 @@ module.exports = (io) ->
       next_piece()
     current.y -= 1
 
-  _loop = setInterval step, 500
+  #_loop = setInterval step, 500
 
