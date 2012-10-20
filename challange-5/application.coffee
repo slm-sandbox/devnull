@@ -6,10 +6,11 @@ module.exports = (io) ->
     pong:
       x: 50
       y: 50
-      dx: 4
-      dy: 2
+      dx: 10
+      dy: 6
     over: false
     step: ->
+      return if @over
       console.log 'state'
       @pong.x += @pong.dx
       @pong.y += @pong.dy
