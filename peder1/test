@@ -1,0 +1,361 @@
+HTML
+
+<!DOCTYPE html>
+<html lang="en">
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- this web page, its source code, and all related files and data are  -->
+  <!-- copyright (c) 2009-2012 drow <drow@bin.sh>.  all rights reserved.   -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<head>
+  <meta charset="utf-8" />
+
+  <title>donjon; Traveller System Generator</title>
+  <link rel="stylesheet" type="text/css" href="/style/stats.css" />
+  <link rel="shortcut icon" type="image/vnd.microsoft.icon"
+    href="/skin/images/donjon.ico" />
+
+  <link rel="stylesheet" type="text/css" media="all"
+    href="http://www.bin.sh/skin/style/common.css" />
+  <link rel="stylesheet" type="text/css" media="all"
+    href="/skin/donjon.css" />
+
+  <script type="text/javascript"
+    src="http://www.bin.sh/lib/scriptaculous/prototype.js"></script>
+  <script type="text/javascript"
+    src="http://www.bin.sh/lib/scriptaculous/effects.js"></script>
+  <script type="text/javascript"
+    src="http://www.bin.sh/lib/scriptaculous/dragdrop.js"></script>
+  <script type="text/javascript"
+    src="http://www.bin.sh/lib/scriptaculous/controls.js"></script>
+
+  <script type="text/javascript">
+    if (window != top) top.location.href = location.href;
+  </script>
+</head>
+<body>
+  <table class="body">
+    <tr>
+      <td colspan="2" class="header">
+        <h1><a href="/">donjon</a></h1>
+      </td>
+    </tr>
+    <tr>
+      <td id="td-nav" class="nav">
+        <h2>General</h2>
+<ul><li><a href="/world/" title="Generate a random world map.">Fractal World Generator</a></li></ul>
+<h2>Fantasy</h2>
+<ul><li><a href="/fantasy/name/" title="Generate random names for characters, weapons, festivals, towns, taverns, planar locations, etc.">Fantasy Name Generator</a></li><li><a href="/fantasy/random/" title="Generate random NPCs, quests, etc.">Random Generator</a></li><li><a href="/fantasy/adventure/" title="Generate random adventure elements based on the Dungeon Master's Design Kit.">Random Adventure Generator</a></li><li><a href="/fantasy/dungeon/" title="Generate a dungeon with monsters and traps.">Random Dungeon Generator</a></li><li><a href="/fantasy/inn/" title="Generate random inns and taverns, including menu, patrons, and rumors.">Random Inn Generator</a></li></ul>
+<h2>AD&amp;D</h2>
+<ul><li><a href="/adnd/dungeon/" title="Generate a dungeon with monsters and traps.">Random Dungeon Generator</a></li><li><a href="/adnd/treasure/" title="Coins, gems, jewelry, and magic items.">Random Treasure Generator</a></li></ul>
+<h2>d20/Fantasy</h2>
+<ul><li><a href="/d20/initiative/" title="Track initiative and turn status.">Initiative Tracker</a></li><li><a href="/d20/power/" title="Calculate the optimum amount of Power Attack to use.">Power Attack Calculator</a></li><li><a href="/d20/random/" title="Generate random NPCs, quests, magic items, etc.">Random Generator</a></li><li><a href="/d20/dungeon/" title="Generate a dungeon with monsters and traps from the d20 SRD.">Random Dungeon Generator</a></li><li><a href="/d20/encounter/" title="Select monsters from the d20 SRD based on encounter level, climate, and terrain.">Random Encounter Generator</a></li><li><a href="/d20/magic/shop.html" title="Generate random magic shops with items from the d20 SRD.">Random Magic Shop Generator</a></li><li><a href="/d20/treasure/" title="Coins, gems, art objects, and magic items from the d20 SRD.">Random Treasure Generator</a></li><li><a href="/d20/weather/" title="Generate random weather, from clear to storms.">Random Weather Generator</a></li><li><a href="/d20/xp/" title="Calculate the amount of XP earned for your game.">XP Calculator</a></li></ul>
+<h2>D&amp;D 4e</h2>
+<ul><li><a href="/4e/random/" title="Generate random NPCs, quests, magic items, etc.">Random Generator</a></li><li><a href="/4e/dungeon/" title="Generate a dungeon with monsters and traps.">Random Dungeon Generator</a></li><li><a href="/4e/encounter/" title="Select monsters based on encounter level, climate, and terrain.">Random Encounter Generator</a></li><li><a href="/4e/treasure/" title="Coins, gems, art objects, and magic items.">Random Treasure Generator</a></li></ul>
+<h2>Science Fiction</h2>
+<ul><li><a href="/scifi/name/" title="Generate random names for aliens, items, locations, planets, etc.">SciFi Name Generator</a></li><li><a href="/scifi/random/" title="Generate random NPCs, etc.">Random Generator</a></li><li><a href="/scifi/world/" title="Generate a random world, including size, composition, atmosphere, and other characteristics.">SciFi World Generator</a></li><li><a href="/scifi/system/" title="Generate a random star system, including companion stars and planets.">Star System Generator</a></li><li><a href="/scifi/swsg/" title="Generate a random star system, including primary planet physics, population, and other characteristics.">SWd6 System Generator</a></li><li><a href="/scifi/tsg/" title="Generate a random star system, including primary planet physics, population, and other characteristics.">Traveller System Generator</a></li></ul>
+<h2>Appendix</h2>
+<ul><li><a href="/index.html" title="Index">Index</a></li><li><a href="/dungeon/wallpaper.cgi" title="Random Dungeon Wallpaper">Random Dungeon Wallpaper</a></li></ul>
+
+      </td>
+      <td id="content" class="content">
+
+
+  <h1>Traveller System Generator</h1>
+
+  <form id="system_form" method="get" action="/">
+    <table class="stats">
+      <tbody>
+        <tr><th>&nbsp;</th>
+            <th id="system_name" class="h1"></th>
+            <th class="ctrl"><input type="image" src="/icons/roll.png"
+                onclick="get_name();" /></th></tr>
+      </tbody>
+      <tbody id="system">
+        <tr><td colspan="3"></td></tr>
+      </tbody>
+      <tbody>
+        <tr class="empty"><td colspan="3">&nbsp;</td></tr>
+        <tr><th>&nbsp;</th>
+            <th id="planet_name" class="h2"></th>
+            <th class="ctrl"></th></tr>
+      </tbody>
+      <tbody id="planet">
+        <tr><td colspan="3"></td></tr>
+      </tbody>
+    </table>
+    <div id="planet_map" class="center"></div>
+  </form>
+
+  <script type="text/javascript" src="/lib/dice.js"></script>
+  <script type="text/javascript" src="/lib/form.js"></script>
+  <script type="text/javascript" src="/lib/select.js"></script>
+  <script type="text/javascript" src="/lib/stat_fmt.js"></script>
+  <script type="text/javascript" src="/lib/system.js"></script>
+  <script type="text/javascript" src="/lib/worldgen.js"></script>
+  <div style="display: none;">
+  <div id="starport_A">
+    <p>Excellent quality installation.  Refined fuel available.
+    Annual maintenance overhaul available.
+    Shipyard capable of constructing starships and non-starships present.
+    Naval base and/or scout base may be present.</p>
+  </div>
+  <div id="starport_B">
+    <p>Good quality installation.  Refined fuel available.
+    Annual maintenance overhaul available.
+    Shipyard capable of constructing non-starships present.
+    Naval base and/or scout base may be present.</p>
+  </div>
+  <div id="starport_C">
+    <p>Routine quality installation.  Only unrefined fuel available.
+    Reasonable repair facilities present.
+    Scout base may be present.</p>
+  </div>
+  <div id="starport_D">
+    <p>Poor quality installation.  Only unrefined fuel available.
+    No repair or shipyard facilities present.
+    Scout base may be present.</p>
+  </div>
+  <div id="starport_E">
+    <p>Frontier installation.  Essentially a marked spot of bedrock
+    with no fuel, facilities, or bases present.</p>
+  </div>
+  <div id="starport_X">
+    <p>No starport.  No provision is made for any ship landings.</p>
+  </div>
+</div>
+
+  <div style="display: none;">
+  <div id="atmosphere_0">
+    <p>No atmosphere, requires use of a vacc suit.</p>
+  </div>
+  <div id="atmosphere_1">
+    <p>Trace atmosphere, requires use of a vacc suit.</p>
+  </div>
+  <div id="atmosphere_2">
+    <p>Very thin tainted atmosphere, requires a combination
+    respirator/filter mask for survival.</p>
+  </div>
+  <div id="atmosphere_3">
+    <p>Very thin atmosphere, requires the use of compressors to
+    insure sufficient oxygen to breathe.</p>
+  </div>
+  <div id="atmosphere_4">
+    <p>Thin tainted atmosphere, requres the use of filter masks.</p>
+  </div>
+  <div id="atmosphere_5">
+    <p>Thin atmosphere, breathable without assistance.</p>
+  </div>
+  <div id="atmosphere_6">
+    <p>Standard atmosphere, breathable without assistance.</p>
+  </div>
+  <div id="atmosphere_7">
+    <p>Standard tainted atmosphere, requres the use of filter masks.</p>
+  </div>
+  <div id="atmosphere_8">
+    <p>Dense atmosphere, breathable without assistance.</p>
+  </div>
+  <div id="atmosphere_9">
+    <p>Dense tainted atmosphere, requres the use of filter masks.</p>
+  </div>
+  <div id="atmosphere_A">
+    <p>Exotic atmospheres require the use of oxygen tanks, but
+    protective suits are not required.</p>
+  </div>
+  <div id="atmosphere_B">
+    <p>Corrosive atmospheres require the use of protective suits or
+    vacc suits.</p>
+  </div>
+  <div id="atmosphere_C">
+    <p>Insidious atmospheres require the use of protective suits or
+    vacc suits, and will defeat any personal protective measures in
+    2 to 12 hours.</p>
+  </div>
+</div>
+
+  <div style="display: none;">
+  <div id="government_0">
+    <p>No government structure.
+    In many cases, family bonds predominate.</p>
+  </div>
+  <div id="government_1">
+    <p>Government by a company managerial elite;
+    citizens are company employees.</p>
+  </div>
+  <div id="government_2">
+    <p>Government by advice and consent of the citizen.</p>
+  </div>
+  <div id="government_3">
+    <p>Government by a restricted minority,
+    with little or no input from the masses.</p>
+  </div>
+  <div id="government_4">
+    <p>Government by elected representatives.</p>
+  </div>
+  <div id="government_5">
+    <p>Government by specific individuals for those who agree to be
+    ruled.  Relationships are based on the performance of technical
+    activities which are mutually beneficial.</p>
+  </div>
+  <div id="government_6">
+    <p>Government by an imposed leadership answerable to an outside
+    group.  A colony or conquered area.</p>
+  </div>
+  <div id="government_7">
+    <p>No central ruling authority exists; rival governments compete
+    for control.</p>
+  </div>
+  <div id="government_8">
+    <p>Government by agencies employing individuals selected for their
+    expertise.</p>
+  </div>
+  <div id="government_9">
+    <p>Government by agencies which are insulated from the governed.</p>
+  </div>
+  <div id="government_A">
+    <p>Government by a single leader enjoying the confidence of the
+    citizens.</p>
+  </div>
+  <div id="government_B">
+    <p>A previous charismatic dictator has been replaced by a leader
+    through normal channels.</p>
+  </div>
+  <div id="government_C">
+    <p>Government by a select group, organization, or class enjoying
+    the overwhelming confidence of the citizenry.</p>
+  </div>
+  <div id="government_D">
+    <p>Government by a religious organization without regard to the
+    specific needs of the citizenry.</p>
+  </div>
+</div>
+
+  <script type="text/javascript" src="/scifi/tsg/control.js"></script>
+
+  <div class="footnotes">
+    <p>Based on tables from
+      Traveller, Book 3, Worlds and Adventures, by Game Designers' Workshop.
+    <br />Traveller is a registered trademark of Far Future Enterprises.
+    <br />No infringement intended.</p>
+
+    <p id="image_credit"></p>
+  </div>
+
+  <div id="fwg_credit" style="display: none;">
+      Fractal World Generator by drow
+  <br />http://donjon.bin.sh/
+  <br />Based on original code by <a target="johol"
+    href="http://www.lysator.liu.se/~johol/fwmg/fwmg.html">John Olsson</a>
+
+  </div>
+
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" class="footer">
+        <p class="copyright">Copyright &copy; 2009-2012 drow</p>
+        <p class="copyright">Some content used under the terms of
+          the <a href="/d20/ogl.html">Open Gaming License</a></p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+control.js
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// tsg/control.js
+//
+// copyright (c) 2010-2012 drow <drow@bin.sh>
+// all rights reserved.
+
+var form_id="system_form",name_rpc="/name/rpc.cgi",seed=Math.floor(Math.random()*2147483647)+1,system={},planet={keys:["starport","naval_base","scout_base","gas_giant","size","atmosphere","hydrography","population","government","law_level","tech_level"],display:["starport","naval_base","scout_base","size","atmosphere","hydrography","population","government","law_level","tech_level"],upp_keys:["starport","size","atmosphere","hydrography","population","government","law_level","-","tech_level"],starport:{title:"Starport:",
+table:{dice:"2d6","2-4":"starport_A","5-6":"starport_B","7-8":"starport_C","9":"starport_D","10-11":"starport_E","12":"starport_X"},data:{starport_A:{title:"A (Excellent)",mod:{scout_base:-3,tech_level:6}},starport_B:{title:"B (Good)",mod:{scout_base:-2,tech_level:4}},starport_C:{title:"C (Routine)",mod:{naval_base:-6,scout_base:-1,tech_level:2}},starport_D:{title:"D (Poor)",mod:{naval_base:-6}},starport_E:{title:"E (Frontier)",mod:{naval_base:-6}},starport_X:{title:"X (No starport)",mod:{naval_base:-6,
+tech_level:-4}}}},naval_base:{title:"Naval Base:",table:{dice:"2d6","2-7":"No","8-12":"Yes"}},scout_base:{title:"Scout Base:",table:{dice:"2d6","2-6":"No","7-12":"Yes"}},gas_giant:{title:"Gas Giant:",table:{dice:"2d6","2-9":"Yes","10-12":"No"}},size:{title:"Size:",table:{dice:"2d6","2":"size_0","3":"size_1","4":"size_2","5":"size_3","6":"size_4","7":"size_5","8":"size_6","9":"size_7","10":"size_8","11":"size_9","12":"size_A"},data:{size_0:{title:"0 (Asteroid Belt)",mod:{atmosphere:-12,hydrography:-12,
+tech_level:2},worldgen:[{image:"asteroid,drakath.jpg",byline:"Asteroid by",credit:"Armin Schieb",link:"http://arminschieb.com/"},{image:"asteroid,shoofly-stock.jpg",byline:"Space Station model by",credit:"Shoofly Stock",link:{url_fmt:"deviantart",user:"shoofly-stock"}},{image:"offworld,bruno_werneck.jpg",credit:[{byline:"Illustration by",credit:"Bruno Werneck",link:"http://www.brunowerneck.com/"},{credit:"Posthuman Studios, LLC",link:"http://eclipsephase.com/"}]},{image:"outpost,digitalblasphemy.jpg",
+byline:"Outpost by",credit:"Ryan Bliss, Digital Blasphemy",link:"http://digitalblasphemy.com/"}]},size_1:{title:"1 (1000 miles)",mod:{atmosphere:-6,tech_level:2}},size_2:{title:"2 (2000 miles)",mod:{atmosphere:-5,tech_level:1}},size_3:{title:"3 (3000 miles)",mod:{atmosphere:-4,tech_level:1}},size_4:{title:"4 (4000 miles)",mod:{atmosphere:-3,tech_level:1}},size_5:{title:"5 (5000 miles)",mod:{atmosphere:-2}},size_6:{title:"6 (6000 miles)",mod:{atmosphere:-1}},size_7:{title:"7 (7000 miles)",mod:{atmosphere:0}},
+size_8:{title:"8 (8000 miles)",mod:{atmosphere:1}},size_9:{title:"9 (9000 miles)",mod:{atmosphere:2}},size_A:{title:"A (10000 miles)",mod:{atmosphere:3}}}},atmosphere:{title:"Atmosphere:",table:{dice:"2d6","2":"atmosphere_0","3":"atmosphere_1","4":"atmosphere_2","5":"atmosphere_3","6":"atmosphere_4","7":"atmosphere_5","8":"atmosphere_6","9":"atmosphere_7","10":"atmosphere_8","11":"atmosphere_9","12":"atmosphere_A","13":"atmosphere_B","14":"atmosphere_C"},data:{atmosphere_0:{title:"0 (No atmosphere)",
+mod:{hydrography:-11,tech_level:1},worldgen:{palette:"Greyscale"}},atmosphere_1:{title:"1 (Trace)",mod:{hydrography:-10,tech_level:1}},atmosphere_2:{title:"2 (Very thin, tainted)",mod:{hydrography:-5,tech_level:1}},atmosphere_3:{title:"3 (Very thin)",mod:{hydrography:-4,tech_level:1}},atmosphere_4:{title:"4 (Thin, tainted)",mod:{hydrography:-3}},atmosphere_5:{title:"5 (Thin)",mod:{hydrography:-2}},atmosphere_6:{title:"6 (Standard)",mod:{hydrography:-1}},atmosphere_7:{title:"7 (Standard, tainted)",
+mod:{hydrography:0}},atmosphere_8:{title:"8 (Dense)",mod:{hydrography:1}},atmosphere_9:{title:"9 (Dense, tainted)",mod:{hydrography:2}},atmosphere_A:{title:"A (Exotic)",mod:{hydrography:-1,tech_level:1}},atmosphere_B:{title:"B (Corrosive)",mod:{hydrography:0,tech_level:1}},atmosphere_C:{title:"C (Insidious)",mod:{hydrography:1,tech_level:1}}}},hydrography:{title:"Hydrography:",table:{dice:"2d6","2":"hydrography_0","3":"hydrography_1","4":"hydrography_2","5":"hydrography_3","6":"hydrography_4","7":"hydrography_5",
+"8":"hydrography_6","9":"hydrography_7","10":"hydrography_8","11":"hydrography_9","12":"hydrography_A"},data:{hydrography_0:{title:"0 (No free standing water)",worldgen:{pct_water:"0",palette:"Barren"}},hydrography_1:{title:"1 (10% water)",worldgen:{pct_water:"10",palette:"Barren"}},hydrography_2:{title:"2 (20% water)",worldgen:{pct_water:"20",palette:"Barren"}},hydrography_3:{title:"3 (30% water)",worldgen:{pct_water:"30",palette:"Barren"}},hydrography_4:{title:"4 (40% water)",worldgen:{pct_water:"40"}},
+hydrography_5:{title:"5 (50% water)",worldgen:{pct_water:"50"}},hydrography_6:{title:"6 (60% water)",worldgen:{pct_water:"60"}},hydrography_7:{title:"7 (70% water)",worldgen:{pct_water:"70"}},hydrography_8:{title:"8 (80% water)",worldgen:{pct_water:"80"}},hydrography_9:{title:"9 (90% water)",mod:{tech_level:1},worldgen:{pct_water:"90"}},hydrography_A:{title:"A (No land masses)",mod:{tech_level:2},worldgen:{pct_water:"99"}}}},population:{title:"Population:",table:{dice:"2d6","2":"population_0","3":"population_1",
+"4":"population_2","5":"population_3","6":"population_4","7":"population_5","8":"population_6","9":"population_7","10":"population_8","11":"population_9","12":"population_A"},data:{population_0:{title:"0 (No inhabitants)",mod:{government:-12}},population_1:{title:"1 (Tens of inhabitants)",mod:{government:-6,tech_level:1}},population_2:{title:"2 (Hundreds of inhabitants)",mod:{government:-5,tech_level:1}},population_3:{title:"3 (Thousands of inhabitants)",mod:{government:-4,tech_level:1}},population_4:{title:"4 (Tens of thousands)",
+mod:{government:-3,tech_level:1}},population_5:{title:"5 (Hundreds of thousands)",mod:{government:-2,tech_level:1}},population_6:{title:"6 (Millions of inhabitants)",mod:{government:-1}},population_7:{title:"7 (Tens of millions)",mod:{government:0}},population_8:{title:"8 (Hundreds of millions)",mod:{government:1}},population_9:{title:"9 (Billions of inhabitants)",mod:{government:2,tech_level:2}},population_A:{title:"A (Tens of billions)",mod:{government:3,tech_level:4}}}},government:{title:"Government:",
+table:{dice:"2d6","2":"government_0","3":"government_1","4":"government_2","5":"government_3","6":"government_4","7":"government_5","8":"government_6","9":"government_7","10":"government_8","11":"government_9","12":"government_A","13":"government_B","14":"government_C","15":"government_D"},data:{government_0:{title:"0 (No government structure)",mod:{law_level:-7,tech_level:1}},government_1:{title:"1 (Corporation)",mod:{law_level:-6}},government_2:{title:"2 (Participating democracy)",mod:{law_level:-5}},
+government_3:{title:"3 (Self-perpetuating oligarchy)",mod:{law_level:-4}},government_4:{title:"4 (Representative democracy)",mod:{law_level:-3}},government_5:{title:"5 (Feudal technocracy)",mod:{law_level:-2,tech_level:1}},government_6:{title:"6 (Captive government)",mod:{law_level:-1}},government_7:{title:"7 (Balkanization)",mod:{law_level:0}},government_8:{title:"8 (Civil service bureaucracy)",mod:{law_level:1}},government_9:{title:"9 (Impersonal bureaucracy)",mod:{law_level:2}},government_A:{title:"A (Charismatic dictator)",
+mod:{law_level:3}},government_B:{title:"B (Non-charismatic leader)",mod:{law_level:4}},government_C:{title:"C (Charismatic oligarchy)",mod:{law_level:5}},government_D:{title:"D (Religious dictatorship)",mod:{law_level:6,tech_level:-2}}}},law_level:{title:"Law Level:",table:{dice:"2d6","2":"law_0","3":"law_1","4":"law_2","5":"law_3","6":"law_4","7":"law_5","8":"law_6","9":"law_7","10":"law_8","11":"law_9"},data:{law_0:{title:"0 (No prohibitions)"},law_1:{title:"1 (Explosives and poison gas prohibited)"},
+law_2:{title:"2 (Portable energy weapons prohibited)"},law_3:{title:"3 (Weapons of strict military nature prohibited)"},law_4:{title:"4 (Light assault weapons prohibited)"},law_5:{title:"5 (Personal concealable firearms prohibited)"},law_6:{title:"6 (Most firearms prohibited)"},law_7:{title:"7 (Shotguns are prohibited)"},law_8:{title:"8 (Long bladed weapons are controlled)"},law_9:{title:"9 (Any weapon outside ones residence is prohibited)"}}},tech_level:{title:"Tech Level:",table:{dice:"1d6","0":"tech_0",
+"1":"tech_1","2":"tech_2","3":"tech_3","4":"tech_4","5":"tech_5","6":"tech_6","7":"tech_7","8":"tech_8","9":"tech_9","10":"tech_A","11":"tech_B","12":"tech_C","13":"tech_D","14":"tech_E","15":"tech_F"},data:{tech_0:{title:"0 (Stone Age)"},tech_1:{title:"1 (Bronze Age to Middle Ages)"},tech_2:{title:"2 (14th to 17th centuries)"},tech_3:{title:"3 (circa 1700 to 1860)"},tech_4:{title:"4 (circa 1860 to 1900)"},tech_5:{title:"5 (circa 1900 to 1940)"},tech_6:{title:"6 (circa 1940 to 1970)"},tech_7:{title:"7 (circa 1970 to 1980)"},
+tech_8:{title:"8 (circa 1980 to 1990)"},tech_9:{title:"9 (circa 1990 to 2000)"},tech_A:{title:"A (Interstellar community)"},tech_B:{title:"B (Average Imperial)"},tech_C:{title:"C (Average Imperial)"},tech_D:{title:"D (Above average Imperial)"},tech_E:{title:"E (Above average Imperial)"},tech_F:{title:"F (Technical maximum Imperial)"}}},inc_list:{},incom:[]},tsg_fmt={scifi_image:"/scifi/images/#{type}/#{image}"};Object.keys(tsg_fmt).each(function(a){append_fmt(a,tsg_fmt[a])});
+function init_form(){client_form(form_id);get_name();update_planet()}function get_name(){var a={type:"Traveller World",n:1};a={method:"get",parameters:a,onSuccess:function(b){recv_name(b.responseText)},onFailure:function(b){rpc_error(b.statusText)},onException:function(){rpc_error("System Error")}};new Ajax.Request(name_rpc,a)}function recv_name(a){system.name=a;update_name()}function rpc_error(a){$("system_name").update(a)}
+function update_name(){planet.name=system.name+" &nbsp; "+system_upp();$("system_name").update(system.name);$("planet_name").update(planet.name);$("planet_marker")&&$("planet_marker").update(planet.name)}function system_upp(){return planet.upp_keys.map(function(a){return planet[a]?(match=/\w+_(\w+)/.exec(res_value(planet[a])))?match[1]:"?":a}).join("")}
+function update_planet(){var a={};planet.keys.each(function(c){if(compat(c))a[c]=planet_stat(c)});var b=planet.display.map(function(c){return a[c]});$("planet").update(b.join(""));planet.type=planet.size.value=="0"?"asteroid_belt":"terrestrial";if(planet.type!=system.planet_type){b={seed:seed,primary:{type:planet.type}};if(planet.gas_giant.value=="Yes")b.jovian=1;$("system").update(fmt_system(new_system(b)));system.planet_type=planet.type}worldgen&&update_map();system.name&&update_name()}
+function planet_stat(a){var b;if(planet[a].table){set_mods(planet,a);for(var c=0;!b;){var d=select_res(planet[a].table);if(compat(d.value)){planet[a].value=d.value;b=planet[a].value}else{delete d.value;delete d.roll}c++>10&&set_compat("new_stat",{})}}else if(planet[a].value)b=planet[a].value;(c=res_data(planet[a]))&&set_compat(a,c);c=c&&c.title?c.title:b;b=$(b)?$(b).innerHTML:"";return fmt_row({title:planet[a].title,value:c,desc:b,new_stat:true,key:a})}
+function set_compat(a,b){if(b.incom)planet.inc_list[a]=b.incom;else planet.inc_list[a]&&delete planet.inc_list[a];var c=[];Object.keys(planet.inc_list).each(function(d){planet.inc_list[d].each(function(e){c.push(e)})});planet.incom=c}function compat(a){return planet.incom.indexOf(a)==-1}
+function update_map(){var a={};planet.keys.each(function(c){if(proto=des_obj(res_data(planet[c]),["worldgen"])){if(Object.isArray(proto))proto=select_from_list(proto);Object.keys(proto).each(function(d){a[d]||(a[d]=proto[d])})}});if(a.disable){$("planet_map").update("");$("image_credit").update("")}else if(a.image){var b=scifi_image(planet.type,a.image);$("planet_map").update(b);a.credit?$("image_credit").update(build_credit(a)):$("image_credit").update("")}else{a.seed=seed;a.projection="Icosahedral";
+if(res_value(planet.atmosphere)=="atmosphere_0")a.pct_ice=a.pct_water;$("planet_map").update(build_img(worldgen_url(a)));$("image_credit").update($("fwg_credit").innerHTML)}}function scifi_image(a,b){a=eval_fmt("scifi_image",{type:a,image:b});return build_img(a)}function build_img(a){return eval_fmt("img",{src:a})}
+function build_credit(a){if(Object.isArray(a.credit))return a.credit.map(build_credit).join("<br />");else{text=a.credit;if(a.link)text=build_link(a.link,text);if(a.byline)text=a.byline+" "+text;return text}}function build_link(a,b){if(fmt_id=a.url_fmt)a=eval_url(fmt_id,a);return eval_fmt("link_out",{href:a,text:b})}function new_stat(a){set_compat("new_stat",{incom:[planet[a].value]});delete planet[a].table.res;delete planet[a].value;update_planet()}document.observe("dom:loaded",init_form);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// scifi/system.js
+//
+// copyright (c) 2010 drow <drow@bin.sh>
+// all rights reserved.
+
+var star_table={dice:"1d100","01-05":{dice:"1d100","01":{dice:"1d100","01":"O1d10-1 Ia Blue Supergiant","02-20":"O1d10-1 Ia Blue-white Supergiant","21-40":"A1d10-1 Ia White Supergiant","41-95":"K1d10-1 Ia Orange Supergiant","96-00":"M1d10-1 Ia Red Supergiant"},"02-03":{dice:"1d100","01":"O1d10-1 Ib Blue Supergiant","02-20":"B1d10-1 Ib Blue-white Supergiant","21-40":"A1d10-1 Ib White Supergiant","41-95":"K1d10-1 Ib Orange Supergiant","96-00":"M1d10-1 Ib Red Supergiant"},"04-07":{dice:"1d100","01-20":"B1d10-1 II Blue-white Giant",
+"21-40":"A1d10-1 II White Giant","41-95":"K1d10-1 II Orange Giant","96-00":"M1d10-1 II Red Giant"},"08-31":{dice:"1d100","01-20":"B1d10-1 III Blue-white Giant","21-40":"A1d10-1 III White Giant","41-80":"K1d10-1 III Orange Giant","81-00":"M1d10-1 III Red Giant"},"32-00":{dice:"1d100","01-20":"B1d10-1 IV Blue-white Subgiant","21-40":"A1d10-1 IV White Subgiant","41-60":"K1d10-1 IV Orange Subgiant","61-00":"M1d10-1 IV Red Subgiant"}},"06-95":{dice:"1d100","01":"B1d10-1 V Blue-white Main Sequence","02-20":"A1d10-1 V White Main Sequence",
+"21-40":"F1d10-1 V Yellow-white Main Sequence","41-70":"G1d10-1 V Yellow Main Sequence","71-90":"K1d10-1 V Orange Main Sequence","91-00":"M1d10-1 V Red Dwarf"},"96-00":{dice:"1d100","01-20":"DA1d9 White Dwarf","21-40":"DB1d9 White Dwarf","41-60":"DQ1d9 White Dwarf","61-80":"DZ1d9 White Dwarf","81-00":"DC1d9 White Dwarf"}},wdc=["O","O","B","B","A","A","F","F","G","G"],system_fmt={system_icon:"/scifi/system/#{type}/#{name}.jpg"};Object.keys(system_fmt).each(function(a){append_fmt(a,system_fmt[a])});
+var asteroid_belt={type:"Asteroid Belt",icon:system_icon("worlds","gaspra")};
+function new_system(a){var b=new_star(a),f=[{title:b.icon,value:b.type}],j=a.seed%8+2,g=a.seed%Math.floor(j/2),k=Math.floor(j*2/3),d=Math.floor(Math.random()*6),h=0;for(i=0;i<g;i++){d=next_type(d);var c;if(d<5)c=new_planet({i:i,realm:"inner"});else if(d==5)c=asteroid_belt;else{c=new_jovian({i:i,realm:"inner"});h++}f.push({title:c.icon,value:c.type,desc:c.desc});d=d}var e;if(e=a.primary){if(e.type=="terrestrial")c=new_planet({realm:"inner",icon:"earth"});else if(e.type=="satellite"){c=new_jovian({realm:"inner",
+primary:1});h++}else if(e.type=="asteroid_belt")c=asteroid_belt;else if(e.type=="artificial")c=new_planet({realm:"inner"});else if(e.type=="floating_city"){c=new_jovian({realm:"inner"});h++}else if(e.type=="space_station"){d=next_type(d);if(d<5)c=new_planet({realm:"inner"});else{c=new_jovian({realm:"inner"});h++}d=d}c.name=eval_fmt("span",{id:"planet_marker",text:e.name});f.push({title:c.icon,value:c.name,desc:c.desc});g+=1}for(i=g;i<j;i++){g=i<k?"inner":"outer";d=next_type(d);if(d<5)c=new_planet({i:i,
+realm:g});else if(d==5)c=asteroid_belt;else{c=new_jovian({i:i,realm:g});h++}f.push({title:c.icon,value:c.type,desc:c.desc});d=d}if(a.jovian&&h==0){c=new_jovian({realm:"outer"});f.push({title:c.icon,value:c.type,desc:c.desc});j+=1}return{star:b,n_planets:j,list:f}}function next_type(a){for(var b=0;!b;){b=Math.floor((Math.random()*9+a)/2);if(b==5&&a==5)b=0}return b}
+function new_star(a){a=select_from_table(star_table);var b;if(match=/^([OBAFGKM])/.exec(a))b=match[1];else if(match=/^D[A-Z]+(\d+)/.exec(a))b=wdc[parseInt(match[1])];return{type:a,"class":b,icon:system_icon("stars",b)}}
+function new_planet(a){if(a.icon)a.icon=system_icon("worlds",a.icon);if(a.realm=="inner"){if(!a.type)a.type="Rock Planet";if(!a.icon)a.icon=system_icon("worlds","tethys")}else{if(!a.type)a.type="Ice Planet";if(!a.icon)a.icon=system_icon("worlds","enceladus")}if(!a.desc){var b=[];if(string=n_moons(5,2,"moon"))b.push(string);a.desc=b.join(", ")}return a}
+function new_jovian(a){if(a.icon)a.icon=system_icon("worlds",a.icon);if(a.realm=="inner"){if(!a.type)a.type="Jovian Planet";if(!a.icon)a.icon=system_icon("worlds",jovian_icon())}else{if(!a.type)a.type="Jovian Planet";if(!a.icon)a.icon=system_icon("worlds","neptune")}if(!a.desc){var b=[];if(string=n_moons(80,19,"small moon"))b.push(string);if(string=n_moons(20,4,"large moon"))b.push(string);a.primary&&b.push("1 terrestrial moon");a.desc=b.join(", ")}return a}
+function jovian_icon(){return select_from_list(["jupiter","saturn"])}function system_icon(a,b){a=eval_fmt("system_icon",{type:a,name:b});return eval_fmt("img",{src:a})}function n_moons(a,b,f){a=Math.floor(Math.random()*a)-b;b="";if(a>0)b+=a+" "+f;if(a>1)b+="s";return b}function fmt_system(a){return a.list.map(function(b){return fmt_row(b)}).join("")};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
