@@ -5,12 +5,12 @@ html {
 canvas {
   position: absolute;
   border: 1px solid #808080;
-  height: 600px;
-  width: 800px;
+  height: 300px;
+  width: 400px;
 }
 canvas.left {
-  left: -400px;
+  left: -200px;
 }
 canvas.right {
-  right: -400px;
+  right: -200px;
 }
