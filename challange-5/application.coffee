@@ -10,6 +10,7 @@ module.exports = (io) ->
       y: 50
       dx: 4
       dy: 2
+    over: false
     step: ->
       @pong.x += @pong.dx
       @pong.y += @pong.dy
@@ -20,4 +21,29 @@ module.exports = (io) ->
         @pong.y = 600-(@pong.y-600)
         @pong.dy = -@pong.dy
       if @pong.x <= 0
-        if @pong.
+        if @left - 25 >= @pong.y and @pong.y <= @left + 25
+          @pong.x = -@pong.x
+          @pong.dx = -@pong.dx
+        else
+          @over = true
+      if @pong.x >= 800
+        if @left - 25 >= @pong.y and @pong.y <= @left + 25
+          @pong.x = 800-(@pong.x-800)
+          @pong.dx = -@pong.dx
+        else
+          @over = true
+      io.sockets.emit 'state', @
+
+  players = 0
+
+  io.sockets.on 'join', ()->
+    if ++players is 2
+      setInterval ->
+        state.step()
+      , 150
+  io.sockets.on 'left', (dy)->
+    state.left += dy
+    io.sockets.emit 'state', state
+  io.sockets.on 'right', (dy)->
+    state.right += dy
+    io.sockets.emit 'state', state
