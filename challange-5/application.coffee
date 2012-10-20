@@ -10,6 +10,7 @@ module.exports = (io) ->
       dy: 2
     over: false
     step: ->
+      console.log 'state'
       @pong.x += @pong.dx
       @pong.y += @pong.dy
       if @pong.y < 0
@@ -36,7 +37,9 @@ module.exports = (io) ->
 
   io.sockets.on 'connection', (socket)->
     socket.on 'join', ()->
-      if ++players is 2
+      players++
+      console.log players
+      if players is 2
         setInterval ->
           state.step()
         , 150
