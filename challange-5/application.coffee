@@ -7,11 +7,11 @@ module.exports = (io) ->
       x: 50
       y: 50
       dx: 10
-      dy: 20
+      dy: 6
     over: false
     step: ->
-      return null if @over
-      console.log @pong
+      return if @over
+      console.log 'state'
       @pong.x += @pong.dx
       @pong.y += @pong.dy
       if @pong.y < 0
@@ -21,14 +21,14 @@ module.exports = (io) ->
         @pong.y = 300-(@pong.y-300)
         @pong.dy = -@pong.dy
       if @pong.x <= 0
-        if @left - 25 >= @pong.y and @pong.y <= @left + 25
-          @pong.x = -@pong.x
+        if @left - 50 <= @pong.y and @pong.y <= @left + 50
+          @pong.x = -@pong.x+1
           @pong.dx = -@pong.dx
         else
           @over = true
       if @pong.x >= 400
-        if @left - 25 >= @pong.y and @pong.y <= @left + 25
-          @pong.x = 400-(@pong.x-400)
+        if @right - 50 <= @pong.y and @pong.y <= @right + 50
+          @pong.x = 400-(@pong.x-401)
           @pong.dx = -@pong.dx
         else
           @over = true
@@ -46,8 +46,12 @@ module.exports = (io) ->
           state.step()
         , 150
     socket.on 'left', (dy)->
+      console.log 'left', dy
       state.left += dy
       io.sockets.emit 'state', state
     socket.on 'right', (dy)->
+      console.log 'right', dy
+      console.log state
       state.right += dy
+      console.log state
       io.sockets.emit 'state', state
