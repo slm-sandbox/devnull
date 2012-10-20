@@ -18,6 +18,7 @@ module.exports = (io) ->
     address = server.address()
     console.log("server listening " + address.address + ":" + address.port)
 
+  server.setBroadcast(true);
   server.bind(9001);
 
   io.sockets.on 'connection', (socket)->
