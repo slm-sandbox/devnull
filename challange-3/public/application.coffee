@@ -1,25 +1,39 @@
+
+isCorridor = (tiles)->
+  getTileState = (tile)->
+    Board.get(tile.x, tile.y)
+
+  tile = [getTileState(tile[0]), getTileState(tile[1]), getTileState(tile[2]), getTileState(tile[3])]
+  if tile[0] == 1 and tile[1] == 1 and tile[2] == 0 and tile[3] == 0
+    return true
+  else if tile[0] == 0 and tile[1] == 0 and tile[2] == 1 and tile[3] == 1
+    return true
+  else
+    return false
+
+getDistanceToPlayer = (entity)->
+  x = Player._instance.x - entity.x
+  y = Player._instance.y - entity.y
+  return Math.sqrt(x*x+y*y)
+
 getAdjacentTiles = (monster)->
   mX = monster.x
   mY = monster.y
-
-  adjTiles = []
-  adjTiles.push [mX-1, mY]
-  adjTiles.push [mX+1, mY]
-  adjTiles.push [mX, mY-1]
-  adjTiles.push [mX, mY+1]
-
-  return adjTiles
+  
+  [
+    {x: mX-1, y: mY-0}
+    {x: mX+1, y: mY+0}
+    {x: mX-0, y: mY-1}
+    {x: mX+0, y: mY+1}
+  ]
 
 closestTile = (tiles)->
   distances = []
   for tile in tiles
-    unless Board.get(tile[0], tile[1]) == 0
-      a = Player._instance.x - tile[0]
-      b = Player._instance.y - tile[1] 
-      distances.push [tile, Math.sqrt(a*a+b*b)]
+    distances.push [tile, getDistanceToPlayer tile] unless Board.get(tile.x, tile.y) == 0
   min = [null, Infinity]
   for d in distances
-    if d[1] < min[1]
+    if d[1] + Math.random() < min[1]
       min = d
 
   return min[0]
@@ -27,10 +41,7 @@ closestTile = (tiles)->
 farthestTile = (tiles)->
   distances = []
   for tile in tiles
-    unless Board.get(tile[0], tile[1]) == 0
-      a = Player._instance.x - tile[0]
-      b = Player._instance.y - tile[1] 
-      distances.push [tile, Math.sqrt(a*a+b*b)]
+    distances.push [tile, getDistanceToPlayer tile] unless Board.get(tile.x, tile.y) == 0
   max = [null, 0]
   for d in distances
     if d[1] > max[1]
@@ -55,23 +66,20 @@ class Entity
   collision: (dx, dy)->
     !Board.get @x + dx, @y + dy
   animate: (dx, dy)->
-    sx = @x
-    sy = @y
-    c = 0
-    i = setInterval =>
-      if c++ is 25
-        clearInterval i
-      else
-        @x = sx + dx/25*c
-        @y = sy + dy/25*c
-        Board._instance.draw()
-    , 10
-
+    sx = Math.round @x
+    sy = Math.round @y
+    st = Date.now()
+    fn = =>
+      if Date.now() < st + 250
+        setTimeout fn, 20
+      @x = sx + dx * Math.min(1, (Date.now() - st) / 250)
+      @y = sy + dy * Math.min(1, (Date.now() - st) / 250)
+    setTimeout fn, 20
 
 class Monster extends Entity
   constructor: ->
     @state = 0
-    setInterval =>
+    window.mainLoop.push setInterval =>
       @tick()
     , 250
     super
@@ -80,7 +88,12 @@ class Monster extends Entity
     ctx.fillRect @x, @y, 1, 1
   tick: ->
     target = [closestTile, farthestTile][@state] getAdjacentTiles @
-    @move target[0] - @x, target[1] - @y
+    @move target.x - @x, target.y - @y
+    console.log getDistanceToPlayer @
+    if getDistanceToPlayer(@) < 1
+      console.log 'test'
+      clearInterval i for i in window.mainLoop
+      alert "You're dead!"
 
 class Player extends Entity
   @_instance: null
@@ -96,9 +109,9 @@ class Board extends Array
   @_instance: null
 
   @get: (x, y)->
-    Board._instance[y][x]
+    Board._instance[Math.round y][Math.round x]
   @set: (x, y, v)->
-    Board._instance[y][x] = v
+    Board._instance[Math.round y][Math.round x] = v
   @draw: ->
     Board._instance.draw()
 
@@ -149,13 +162,14 @@ $ ->
   board = new Board
   player = new Player 1, 1
   
+  board.populate()
+  
+  window.mainLoop = [setInterval board.draw.bind board, 10]
+
   new Monster 29, 1
   new Monster 29, 9
   new Monster 29, 19
   new Monster 29, 29
-
-  board.populate()
-  board.draw()
 
   $(document).on 'keydown', (e) ->
   
