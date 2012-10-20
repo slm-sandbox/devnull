@@ -1,0 +1,12 @@
+{
+  "name": "challange-14",
+  "version": "0.1.0",
+  "dependencies": {
+    "node.io": "0.4.x",
+    "jquery": "*",
+    "request": "*",
+    "jsdom": "*",
+    "zombie": "*",
+    "colors": "*"
+  }
+}
