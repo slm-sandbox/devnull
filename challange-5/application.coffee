@@ -6,11 +6,12 @@ module.exports = (io) ->
     pong:
       x: 50
       y: 50
-      dx: 4
-      dy: 2
+      dx: 10
+      dy: 20
     over: false
     step: ->
-      console.log 'state'
+      return null if @over
+      console.log @pong
       @pong.x += @pong.dx
       @pong.y += @pong.dy
       if @pong.y < 0
@@ -31,6 +32,7 @@ module.exports = (io) ->
           @pong.dx = -@pong.dx
         else
           @over = true
+          console.log("************ GAME OVER ************")
       io.sockets.emit 'state', @
 
   players = 0
