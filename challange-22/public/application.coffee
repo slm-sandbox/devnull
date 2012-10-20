@@ -23,4 +23,4 @@ $ ->
   $('#send').click ->
     msg = $('#msg').val()
     socket.emit 'send', msg
-    appendMessage name + ' ' + msg
+    #appendMessage name + ' ' + msg
