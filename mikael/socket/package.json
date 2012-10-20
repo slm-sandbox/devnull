@@ -1,0 +1,10 @@
+{
+  "name": "linus-training-tetris",
+  "version": "0.1.0",
+  "dependencies": {
+    "express": "3.x",
+    "coffee-script": "1.x",
+    "socket.io": "0.9.x",
+    "express-jquery": "1.x"
+  }
+}
