@@ -4,9 +4,11 @@ drawPlay = (player, sq)->
   context.font = "normal 90px Verdana"
   context.fillStyle = "black"
   if player is 1
-    context.fillText "X", sq.x, sq.y
+    console.log sq.x
+    console.log sq.y
+    context.fillText "X", sq.x*100, (sq.y+1)*100
   else
-    context.fillText "O", sq.x, sq.y
+    context.fillText "O", sq.x*100, (sq.y+1)*100
 
 $ ->
   socket = io.connect()
@@ -26,6 +28,17 @@ $ ->
   drawPlay 1, {x:200, y:300}
 
   socket.on 'board', (data)->
+    for a, y in data
+      for v, x in a
+        drawPlay v, x:x, y:y unless v == 0
 
-  $('canvas').click ->
+  $('canvas').click (e)->
+    x = e.pageX
+    y = e.pageY
+    boardX = Math.floor(3*x/300)
+    boardY = Math.floor(3*y/300)
+    console.log boardX, boardY
+    socket.emit 'place', boardX, boardY
 
+
+  socket.emit 'join', 1

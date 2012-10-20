@@ -13,14 +13,14 @@ module.exports = (io) ->
     O = 2
 
     doMove = ->
-      x = Math.random() * 3
-      y = Math.random() * 3
+      x = Math.floor Math.random() * 3
+      y = Math.floor Math.random() * 3
       until board[y][x] is 0
         x = (++x % 3)
         y = (++y % 3) if x is 0
       board[y][x] = computer
       socket.emit 'board', board
-      emit 'winner', w unless (w = anyWinner) is 0
+      socket.emit 'winner', w unless (w = anyWinner) is 0
 
     anyWinner = ->
       #Horizontal
