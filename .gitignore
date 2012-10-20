@@ -14,3 +14,5 @@ results
 npm-debug.log
 
 *.swp
+node_modules
+
