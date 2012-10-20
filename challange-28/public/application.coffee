@@ -1,4 +1,6 @@
 context = null
+player = 3
+cpu = 3
 
 drawPlay = (player, sq)->
   context.font = "normal 90px Verdana"
@@ -25,8 +27,6 @@ $ ->
   context.strokeRect 0,200,100,100
   context.strokeRect 200,200,100,100
 
-  drawPlay 1, {x:200, y:300}
-
   socket.on 'board', (data)->
     for a, y in data
       for v, x in a
@@ -37,11 +37,24 @@ $ ->
     y = e.pageY
     boardX = Math.floor(3*x/300)
     boardY = Math.floor(3*y/300)
-    console.log boardX, boardY
     socket.emit 'place', boardX, boardY
 
   $('#x').click ->
-    socket.emit 'join', 1
+    player = 1
+    cpu = 2
+    socket.emit 'join', player
+    $('button').hide()
 
-  $('#y').click ->
-    socket.emit 'join', 2
+  $('#o').click ->
+    player = 2
+    cpu = 1
+    socket.emit 'join', player
+    $('button').hide()
+
+  socket.on 'winner', (data)->
+    if data == player
+      alert('you win')
+    else if data == 0
+      alert('you fail')
+    else if data == cpu
+      alert('cpu wins')
