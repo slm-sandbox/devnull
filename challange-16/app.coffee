@@ -23,5 +23,5 @@ io.set 'log level', 2
 routes app
 
 server.listen(3000)
-application(io)
+application(io, app)
 

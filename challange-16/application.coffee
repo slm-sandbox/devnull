@@ -1,5 +1,12 @@
-module.exports = (io) ->
+module.exports = (io, app) ->
   
+  A = 31
+  B = 16
+
+  Canvas = require 'canvas'
+  canvas = new Canvas A, A
+  ctx = canvas.getContext '2d'
+
   isCorridor = (tiles)->
     getTileState = (tile)->
       Board.get(tile.x, tile.y)
@@ -54,11 +61,10 @@ module.exports = (io) ->
 
     return max[0]
 
-  A = 31
-  B = 16
-
   class Entity
     @_all: []
+    @remove: (entity)->
+      Entity._all.splice idx, 1 if (idx = Entity._all.indexOf entity) != -1
     constructor: (@x, @y)->
       Entity._all.push @
       @lock = 0
@@ -92,36 +98,47 @@ module.exports = (io) ->
       Monster._all.push @
       @state = 0
       super
-      tiles = getAdjacentTiles @
-      target = [closestTile, farthestTile][@state] tiles
-      @dx = target.x - @x
-      @dy = target.y - @y
+      @dx = 0
+      @dy = 0
       @myLoop = setInterval =>
         @tick()
       , 250
-      window.mainLoop.push @myLoop
+      module.exports.mainLoop.push @myLoop
     draw: (ctx)->
-      ctx.fillStyle = ['blue', 'lightblue'][@state]
-      ctx.fillRect @x, @y, 1, 1
+      ctx.fillStyle = ['blue', 'lightblue'][@state];
+      ctx.fillRect(@x, @y, 1, 1);
     tick: ->
       tiles = getAdjacentTiles @
-      unless isCorridor(tiles)
+      if (@dx is 0 and @dy is 0) or !isCorridor(tiles)
         target = [closestTile, farthestTile][@state] tiles
-        @dx = target.x - @x
-        @dy = target.y - @y
+        if target
+          @dx = target.x - @x
+          @dy = target.y - @y
+        else
+          @dx = @dy = 0
 
       @move @dx, @dy
 
+      plrs = []
       for player in Player._all
+        plrs.push player
+      for player in plrs
         if getDistanceToPlayer(@, player) < 1
           if @state is 0
-            @socket.emit 'game-over'
+            player.socket.emit 'game-over'
+            player.iamdead()
+            Player.remove player
           else
             Monster.remove @
 
   class Player extends Entity
+    @_all: []
     @_instance: null
+    @remove: (player)->
+      Entity.remove player
+      Player._all.splice idx, 1 if (idx = Player._all.indexOf player) != -1
     constructor: ->
+      Player._all.push @
       Player._instance = @
       super
     postMove: ->
@@ -150,8 +167,8 @@ module.exports = (io) ->
       super
       Pill._all["#{@x},#{@y}"] = @
     draw: (ctx)->
-      ctx.fillStyle = '#FFFF00'
-      ctx.fillRect @x, @y, 1, 1
+      ctx.fillStyle='#FFFF00'
+      ctx.fillRect(@x,@y,1,1)
 
   class Board extends Array
 
@@ -167,14 +184,6 @@ module.exports = (io) ->
     constructor: ->
 
       Board._instance = @
-
-      @canvas = document.createElement 'canvas'
-      @canvas.height = A*B
-      @canvas.width = A*B
-      @ctx = @canvas.getContext '2d'
-      @ctx.scale B, B
-
-      document.body.appendChild @canvas
 
       for y in [0...A]
         @push []
@@ -192,36 +201,59 @@ module.exports = (io) ->
           @[y][x] = 1
 
     draw: ->
-      @ctx.fillStyle = 'black'
-      @ctx.fillRect 0, 0, A, A
+      ctx.fillStyle='black';
+      ctx.fillRect(0,0,A,A);
       for y in [0...A]
         for x in [0...A]
           switch @[y][x]
             when 0
-              @ctx.fillStyle = 'teal'
-              @ctx.fillRect x, y, 1, 1
+              ctx.fillStyle = 'teal'
+              ctx.fillRect(x,y,1,1)
             when 1
-              @ctx.fillStyle = 'yellow'
-              @ctx.fillRect x+.3, y+.3, .4, .4
+              ctx.fillStyle = 'yellow'
+              ctx.fillRect(x+.3,y+.3,.4,.4)
       for e in Entity._all
-        e.draw @ctx
+        e.draw ctx
+      canvas.toDataURL (err, str)->
+        io.sockets.emit 'draw', str
 
   board = new Board
-  player = new Player 1, 1
   
   board.populate()
   
-  window.mainLoop = [setInterval board.draw.bind board, 10]
+  start = ->
 
-  new Monster 29, 1
-  new Monster 29, 9
-  new Monster 29, 19
-  new Monster 29, 29
+    module.exports.mainLoop = [setInterval board.draw.bind board, 500]
 
-  new Pill 1, 3 + Math.round Math.random() * 5
-  new Pill 1, 9 + Math.round Math.random() * 5
-  new Pill 1, 16 + Math.round Math.random() * 5
-  new Pill 1, 22 + Math.round Math.random() * 5
+    start = ->
 
+  start2 = ->
 
+    new Monster 29, 1
+    new Monster 29, 9
+    new Monster 29, 19
+    new Monster 29, 29
+
+    new Pill 1, 3 + Math.round Math.random() * 5
+    new Pill 1, 9 + Math.round Math.random() * 5
+    new Pill 1, 16 + Math.round Math.random() * 5
+    new Pill 1, 22 + Math.round Math.random() * 5
+
+    start2 = ->
+
+  io.sockets.on 'connection', (socket)->
+
+    player = null
+
+    socket.on 'join', ->
+      return if player
+      start()
+      player = new Player 1, 1
+      player.socket = socket
+      player.iamdead = -> player = null
+      start2()
+
+    socket.on 'move', (dx, dy)->
+      return unless player
+      player.move dx, dy
 
