@@ -12,9 +12,9 @@ module.exports = (io) ->
     else
       return false
 
-  getDistanceToPlayer = (entity)->
-    x = Player._instance.x - entity.x
-    y = Player._instance.y - entity.y
+  getDistanceToPlayer = (entity, player)->
+    x = player.x - entity.x
+    y = player.y - entity.y
     return Math.sqrt(x*x+y*y)
 
   getAdjacentTiles = (monster)->
@@ -30,23 +30,27 @@ module.exports = (io) ->
 
   closestTile = (tiles)->
     distances = []
-    for tile in tiles
-      distances.push [tile, getDistanceToPlayer tile] unless Board.get(tile.x, tile.y) == 0
     min = [null, Infinity]
-    for d in distances
-      if d[1] + Math.random() < min[1]
-        min = d
+
+    for player in Player._all
+      for tile in tiles
+        distances.push [tile, getDistanceToPlayer(tile, player)] unless Board.get(tile.x, tile.y) == 0
+      for d in distances
+        if d[1] + Math.random() < min[1]
+          min = d
 
     return min[0]
 
   farthestTile = (tiles)->
     distances = []
-    for tile in tiles
-      distances.push [tile, getDistanceToPlayer tile] unless Board.get(tile.x, tile.y) == 0
     max = [null, 0]
-    for d in distances
-      if d[1] > max[1]
-        max = d
+
+    for player in Player._all
+      for tile in tiles
+        distances.push [tile, getDistanceToPlayer(tile, player)] unless Board.get(tile.x, tile.y) == 0
+      for d in distances
+        if d[1] > max[1]
+          max = d
 
     return max[0]
 
@@ -108,12 +112,12 @@ module.exports = (io) ->
 
       @move @dx, @dy
 
-      if getDistanceToPlayer(@) < 1
-        if @state is 0
-          clearInterval i for i in window.mainLoop
-          alert "You're dead!"
-        else
-          Monster.remove @
+      for player in Player._all
+        if getDistanceToPlayer(@, player) < 1
+          if @state is 0
+            @socket.emit 'game-over'
+          else
+            Monster.remove @
 
   class Player extends Entity
     @_instance: null
