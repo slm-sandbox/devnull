@@ -6,6 +6,9 @@ module.exports = (io) ->
 
     board = [[0,0,0],[0,0,0],[0,0,0]]
 
+    user = 0
+    computer = 0
+
     X = 1
     O = 2
 
@@ -15,7 +18,9 @@ module.exports = (io) ->
       until board[y][x] is 0
         x = (++x % 3)
         y = (++y % 3) if x is 0
+      board[y][x] = computer
       socket.emit 'board', board
+      emit 'winner', w unless (w = anyWinner) is 0
 
     anyWinner = ->
       #Horizontal
@@ -30,9 +35,6 @@ module.exports = (io) ->
       return board[1][1] if board[0][0] is board[1][1] is board[2][2] > 0
       return board[1][1] if board[0][2] is board[1][1] is board[2][0] > 0
       return 0
-
-    user = 0
-    computer = 0
 
     socket.on 'join', (team)->
       user = team
