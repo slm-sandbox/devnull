@@ -32,6 +32,7 @@ module.exports = (io) ->
           @pong.dx = -@pong.dx
         else
           @over = true
+      io.sockets.emit 'state', @
 
   players = 0
 
@@ -40,6 +41,9 @@ module.exports = (io) ->
       setInterval ->
         state.step()
       , 150
-
-  io.sockets.on 'left', (dy)-> state.left += dy
-  io.sockets.on 'right', (dy)-> state.right += dy
+  io.sockets.on 'left', (dy)->
+    state.left += dy
+    io.sockets.emit 'state', state
+  io.sockets.on 'right', (dy)->
+    state.right += dy
+    io.sockets.emit 'state', state
