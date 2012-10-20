@@ -34,5 +34,5 @@ module.exports = (io) ->
 
     socket.on 'send', (msg)->
       return unless username
-      m = new Buffer username + " " + msg
+      m = new Buffer username + ": " + msg
       server.send m, 0, m.length, 9001, '255.255.255.255'

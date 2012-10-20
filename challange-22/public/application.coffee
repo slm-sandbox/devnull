@@ -3,7 +3,7 @@ name = null
 appendMessage = (msg)->
   msgNode = $('<div class="msg"></div>')
   msgNode.text(msg)
-  $('#messageList').append(msg)
+  $('#messageList').append(msgNode)
 
 login = ->
   $('#login').hide()
@@ -23,4 +23,3 @@ $ ->
   $('#send').click ->
     msg = $('#msg').val()
     socket.emit 'send', msg
-    #appendMessage name + ' ' + msg
