@@ -70,25 +70,33 @@ class Entity
     sy = Math.round @y
     st = Date.now()
     fn = =>
-      if Date.now() < st + 250
-        setTimeout fn, 20
       @x = sx + dx * Math.min(1, (Date.now() - st) / 250)
       @y = sy + dy * Math.min(1, (Date.now() - st) / 250)
+      if Date.now() < st + 250
+        setTimeout fn, 20
+      else
+        @postMove && @postMove()
     setTimeout fn, 20
 
 class Monster extends Entity
+  @_all: []
+  @remove: (monster)->
+    clearInterval monster.myLoop
+    Entity._all.splice idx, 1 if (idx = Entity._all.indexOf monster) != -1
   constructor: ->
+    Monster._all.push @
     @state = 0
     super
     tiles = getAdjacentTiles @
     target = [closestTile, farthestTile][@state] tiles
     @dx = target.x - @x
     @dy = target.y - @y
-    window.mainLoop.push setInterval =>
+    @myLoop = setInterval =>
       @tick()
     , 250
+    window.mainLoop.push @myLoop
   draw: (ctx)->
-    ctx.fillStyle = 'blue'
+    ctx.fillStyle = ['blue', 'lightblue'][@state]
     ctx.fillRect @x, @y, 1, 1
   tick: ->
     tiles = getAdjacentTiles @
@@ -98,20 +106,46 @@ class Monster extends Entity
       @dy = target.y - @y
 
     @move @dx, @dy
-    console.log getDistanceToPlayer @
 
     if getDistanceToPlayer(@) < 1
-      console.log 'test'
-      clearInterval i for i in window.mainLoop
-      alert "You're dead!"
+      if @state is 0
+        clearInterval i for i in window.mainLoop
+        alert "You're dead!"
+      else
+        Monster.remove @
 
 class Player extends Entity
   @_instance: null
   constructor: ->
     Player._instance = @
     super
+  postMove: ->
+    pill = Pill.get @x, @y
+    if pill
+      for m in Monster._all
+        m.state = 1
+      setTimeout ->
+        for m in Monster._all
+          m.state = 0
+      , 5000
+      Pill.remove pill
+
   draw: (ctx)->
     ctx.fillStyle = 'red'
+    ctx.fillRect @x, @y, 1, 1
+
+class Pill extends Entity
+  @_all: {}
+  @get: (x, y)->
+    Pill._all["#{x},#{y}"] || null
+  @remove: (pill)->
+    delete Pill._all["#{pill.x},#{pill.y}"]
+    Entity._all.splice idx, 1 if (idx = Entity._all.indexOf pill) != -1
+  constructor: ->
+    super
+    Pill._all["#{@x},#{@y}"] = @
+  draw: (ctx)->
+    ctx.fillStyle = '#FFFF00'
     ctx.fillRect @x, @y, 1, 1
 
 class Board extends Array
@@ -180,6 +214,11 @@ $ ->
   new Monster 29, 9
   new Monster 29, 19
   new Monster 29, 29
+
+  new Pill 1, 3 + Math.round Math.random() * 5
+  new Pill 1, 9 + Math.round Math.random() * 5
+  new Pill 1, 16 + Math.round Math.random() * 5
+  new Pill 1, 22 + Math.round Math.random() * 5
 
   $(document).on 'keydown', (e) ->
   
