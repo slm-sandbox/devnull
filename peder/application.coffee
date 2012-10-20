@@ -10,7 +10,7 @@ module.exports = (io) ->
   pieces = [ 
     [[0, 0], [1, 0], [2, 0], [3, 0]], 
     [[0, 0], [1, 0], [2, 0], [2, 1]], 
-    [[0, 0], [1, 0], [1, 0], [1, 1]], 
+    [[0, 0], [1, 0], [0, 1], [1, 1]], 
     [[0, 0], [1, 0], [1, 1], [1, 2]]
   ]
 
@@ -26,24 +26,34 @@ module.exports = (io) ->
   )()
 
   next_piece = ->
+    console.log('next piece')
+    console.log(current.coords())
     current.coords().map (a) ->
       board[a[1]][a[0]] = 1
     init_current()
+    game_over() if collision()
 
   collision = ->
     r = false    
     current.coords().map (a)->
       r = true if a[1] == 0
-    current.coords().map (a) ->
-      r = true if (a[1] < board.length and board[a[1]][a[0]] == 1) 
+    unless r
+      current.coords().map (a) ->
+        r = true if (a[1] < board.length and board[a[1] - 1][a[0]] == 1) 
     r
+
+  game_over = ->
+    clearInterval(_loop)
+    console.log("       ******** GAME OVER ********")
 
   step = ->
     console.log board
+    console.log current.piece
     console.log current.coords()
     console.log "\n"
-    next_piece() if collision()
+    if collision()
+      next_piece()
     current.y -= 1
 
-  setInterval step, 500
+  _loop = setInterval step, 500
 
