@@ -3,7 +3,7 @@ isCorridor = (tiles)->
   getTileState = (tile)->
     Board.get(tile.x, tile.y)
 
-  tile = [getTileState(tile[0]), getTileState(tile[1]), getTileState(tile[2]), getTileState(tile[3])]
+  tile = [getTileState(tiles[0]), getTileState(tiles[1]), getTileState(tiles[2]), getTileState(tiles[3])]
   if tile[0] == 1 and tile[1] == 1 and tile[2] == 0 and tile[3] == 0
     return true
   else if tile[0] == 0 and tile[1] == 0 and tile[2] == 1 and tile[3] == 1
@@ -79,12 +79,14 @@ class Entity
 class Monster extends Entity
   constructor: ->
     @state = 0
-    @dx = 0
-    @dy = 0
+    super
+    tiles = getAdjacentTiles @
+    target = [closestTile, farthestTile][@state] tiles
+    @dx = target.x - @x
+    @dy = target.y - @y
     window.mainLoop.push setInterval =>
       @tick()
     , 250
-    super
   draw: (ctx)->
     ctx.fillStyle = 'blue'
     ctx.fillRect @x, @y, 1, 1
@@ -97,7 +99,7 @@ class Monster extends Entity
 
     @move @dx, @dy
     console.log getDistanceToPlayer @
-    
+
     if getDistanceToPlayer(@) < 1
       console.log 'test'
       clearInterval i for i in window.mainLoop
