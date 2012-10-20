@@ -1,4 +1,30 @@
 
+class Entity
+  @_all = []
+  constructor: (@x, @y)->
+    Entity._all.push @
+    @lock = 0
+  move: (dx, dy)->
+    return unless @lock <= Date.now()
+    unless @collision dx, dy
+      board[@y][@x] = 2
+      draw()
+      @lock = Date.now() + 250
+      animate player, dx, dy
+  collision: (dx, dy)->
+    !board[@y + dy][@x + dx]
+
+
+class Monster extends Entity
+  draw: ->
+    ctx.fillStyle = 'blue'
+    ctx.fillRect @x, @y, 1, 1
+
+class Player extends Entity
+  draw: ->
+    ctx.fillStyle = 'red'
+    ctx.fillRect @x, @y, 1, 1
+
 $ ->
   A = 31
   B = 16
@@ -43,8 +69,9 @@ $ ->
           when 1
             ctx.fillStyle = 'yellow'
             ctx.fillRect x+.3, y+.3, .4, .4
-    ctx.fillStyle = 'red'
-    ctx.fillRect player.x, player.y, 1, 1
+    for e in Entity._all
+      e.draw()
+    
 
   animate = (obj, dx, dy)->
     sx = obj.x
