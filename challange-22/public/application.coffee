@@ -4,6 +4,7 @@ appendMessage = (msg)->
   $('#messageList').append(msg)
 
 $ ->
+  window.socket = socket
   socket = io.connect()
   socket.on 'msg', (msg)->
     appendMessage msg
