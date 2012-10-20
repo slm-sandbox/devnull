@@ -8,11 +8,12 @@ module.exports = (io) ->
 
   server.on "message", (msg, rinfo)->
     console.log("server got: " + msg + " from " + rinfo.address + ":" + rinfo.port)
-    messages.push msg
+    m = msg.toString()
+    messages.push m
     setTimeout ->
       messages.shift()
     , 60000
-    io.sockets.emit 'msg', msg
+    io.sockets.emit 'msg', m
 
   server.on "listening", ->
     address = server.address()
