@@ -18,6 +18,7 @@ app.use express.bodyParser()
 app.use express.methodOverride()
 app.use express.static __dirname + '/public'
 app.use express.errorHandler { dumpExceptions: true, showStack: true }
+io.set 'log level', 2
 
 routes app
 

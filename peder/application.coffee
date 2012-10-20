@@ -45,21 +45,20 @@ module.exports = (io) ->
   game_over = ->
     clearInterval(_loop)
     console.log("       ******** GAME OVER ********")
+    io.sockets.emit 'game over', 'GAME OVER'
 
   io.sockets.on 'connection', (socket) ->
     console.log 'connect'
     socket.emit 'news', { hello: 'world' }
     socket.on 'other', (data) ->
       console.log data
+    _loop = setInterval step, 500
+    
+  _loop = null
    
   step = ->
-    console.log board
-    console.log current.piece
-    console.log current.coords()
-    console.log "\n"
     if collision()
       next_piece()
     current.y -= 1
-
-  #_loop = setInterval step, 500
+    io.sockets.emit 'step', { board: board, current: current.coords() }
 
