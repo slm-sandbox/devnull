@@ -79,6 +79,8 @@ class Entity
 class Monster extends Entity
   constructor: ->
     @state = 0
+    @dx = 0
+    @dy = 0
     window.mainLoop.push setInterval =>
       @tick()
     , 250
@@ -87,9 +89,15 @@ class Monster extends Entity
     ctx.fillStyle = 'blue'
     ctx.fillRect @x, @y, 1, 1
   tick: ->
-    target = [closestTile, farthestTile][@state] getAdjacentTiles @
-    @move target.x - @x, target.y - @y
+    tiles = getAdjacentTiles @
+    unless isCorridor(tiles)
+      target = [closestTile, farthestTile][@state] tiles
+      @dx = target.x - @x
+      @dy = target.y - @y
+
+    @move @dx, @dy
     console.log getDistanceToPlayer @
+    
     if getDistanceToPlayer(@) < 1
       console.log 'test'
       clearInterval i for i in window.mainLoop
