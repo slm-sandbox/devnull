@@ -40,5 +40,8 @@ $ ->
     console.log boardX, boardY
     socket.emit 'place', boardX, boardY
 
+  $('#x').click ->
+    socket.emit 'join', 1
 
-  socket.emit 'join', 1
+  $('#y').click ->
+    socket.emit 'join', 2
