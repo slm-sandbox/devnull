@@ -8,6 +8,12 @@
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <style type="text/css">
 
+    div {
+      float: left;
+      margin: 8px;
+      text-align: center;
+    }
+
     canvas {
       border: 8px solid black;
     }
@@ -16,25 +22,30 @@
 </head>
 <body>
 
-
+  <button id="join">Join</button>
 
 
 
 
   <script type="text/javascript">
 
-    boards = [
-      new Tetris,
-      new Tetris
-    ];
-
     socket = io.connect();
 
-    socket.on('state', function (data) {
-      window.state = data;
+    boards = [];
+
+    socket.on('setup', function (data) {
       for(var i=0; i<data.length; i++) {
-        boards[i].draw(data[i]);
+        boards.push(new Tetris(socket, i));
       }
+    });
+
+    socket.on('joined', function (data) {
+      boards.push(new Tetris(socket, data));
+    });
+
+    $('#join').on('click', function () {
+      $('#join').remove();
+      boards.push(new Tetris(socket, null));
     });
 
   </script>
