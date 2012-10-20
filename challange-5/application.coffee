@@ -32,6 +32,7 @@ module.exports = (io) ->
           @pong.dx = -@pong.dx
         else
           @over = true
+          console.log("************ GAME OVER ************")
       io.sockets.emit 'state', @
 
   players = 0
