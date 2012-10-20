@@ -1,4 +1,17 @@
 extends layout
 
 block main
-  audio#audio
+  audio#audio(src="file.mp3", controls)
+  br
+  span threshold
+  br
+  input#threshold(type="range", min="0", max="1", value="0.4", step="0.1")
+  br
+  span freqMin
+  br
+  input#frequencyMin(type="range", min="0", max="10", value="0", step="1")
+  br
+  span freqMax
+  br
+  input#frequencyMax(type="range", min="0", max="10", value="10", step="1")
+  br
