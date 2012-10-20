@@ -1,3 +1,4 @@
+
 $ ->
   A = 31
   B = 16
@@ -14,8 +15,16 @@ $ ->
   player =
     x: 1
     y: 1
+    lock: 0
     move: (dx, dy)->
-
+      return unless @lock <= Date.now()
+      unless @collision dx, dy
+        board[@y][@x] = 2
+        draw()
+        @lock = Date.now() + 250
+        animate player, dx, dy
+    collision: (dx, dy)->
+      !board[@y + dy][@x + dx]
 
   for y in [0...A]
     board.push []
@@ -25,8 +34,8 @@ $ ->
   draw = ->
     ctx.fillStyle = 'black'
     ctx.fillRect 0, 0, A, A
-    for y in [0..A]
-      for x in [0..A]
+    for y in [0...A]
+      for x in [0...A]
         switch board[y][x]
           when 0
             ctx.fillStyle = 'teal'
@@ -34,12 +43,27 @@ $ ->
           when 1
             ctx.fillStyle = 'yellow'
             ctx.fillRect x+.3, y+.3, .4, .4
+    ctx.fillStyle = 'red'
+    ctx.fillRect player.x, player.y, 1, 1
 
-  for x in [1...30] when x%2 and Math.random() > .5
+  animate = (obj, dx, dy)->
+    sx = obj.x
+    sy = obj.y
+    c = 0
+    i = setInterval ->
+      if c++ is 25
+        clearInterval i
+      else
+        obj.x = sx + dx/25*c
+        obj.y = sy + dy/25*c
+        draw()
+    , 10
+
+  for x in [1...30] when x%2 and (Math.random() > .5 or x in [1,29])
     for y in [1...30]
       board[y][x] = 2
 
-  for y in [1...30] when y%2 and Math.random() > .5
+  for y in [1...30] when y%2 and (Math.random() > .5 or x in [1,29])
     for x in [1...30]
       board[y][x] = 1
 
