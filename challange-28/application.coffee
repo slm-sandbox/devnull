@@ -13,35 +13,44 @@ module.exports = (io) ->
     X = 1
     O = 2
 
-    doMove = ->
+    didMove = ->
+      console.log board
+      moves++
+      socket.emit 'board', board
+      unless (w = anyWinner()) is 0
+        socket.emit 'winner', w 
+        return false
       if moves is 9
         socket.emit 'winner', 0
-        return
+        return false
+      return true
+
+    doMove = ->
       x = Math.floor Math.random() * 3
       y = Math.floor Math.random() * 3
       until board[y][x] is 0
         x = (++x % 3)
         y = (++y % 3) if x is 0
       board[y][x] = computer
-      moves++
-      socket.emit 'board', board
-      socket.emit 'winner', w unless (w = anyWinner) is 0
-      if moves is 9
-        socket.emit 'winner', 0
-        return
+      didMove()
 
     anyWinner = ->
+      console.log 'didWin(1)', didWin(1)
+      console.log 'didWin(2)', didWin(2)
+      return didWin(1) or didWin(2)
+
+    didWin = (p)->
       #Horizontal
-      return board[0][0] if board[0][0] is board[0][1] is board[0][2] > 0
-      return board[1][0] if board[1][0] is board[1][1] is board[1][2] > 0
-      return board[2][0] if board[2][0] is board[2][1] is board[2][2] > 0
+      return p if board[0][0] is p and board[0][1] is p and board[0][2] is p
+      return p if board[1][0] is p and board[1][1] is p and board[1][2] is p
+      return p if board[2][0] is p and board[2][1] is p and board[2][2] is p
       #Vertical
-      return board[0][0] if board[0][0] is board[1][0] is board[2][0] > 0
-      return board[0][1] if board[0][1] is board[1][1] is board[2][1] > 0
-      return board[0][2] if board[0][2] is board[1][2] is board[2][2] > 0
+      return p if board[0][0] is p and board[1][0] is p and board[2][0] is p
+      return p if board[0][1] is p and board[1][1] is p and board[2][1] is p
+      return p if board[0][2] is p and board[1][2] is p and board[2][2] is p
       #Diagonal
-      return board[1][1] if board[0][0] is board[1][1] is board[2][2] > 0
-      return board[1][1] if board[0][2] is board[1][1] is board[2][0] > 0
+      return p if board[0][0] is p and board[1][1] is p and board[2][2] is p
+      return p if board[0][2] is p and board[1][1] is p and board[2][0] is p
       return 0
 
     socket.on 'join', (team)->
@@ -52,8 +61,7 @@ module.exports = (io) ->
     socket.on 'place', (x, y)->
       return unless board[y][x] is 0
       board[y][x] = user
-      moves++
-      doMove()
+      doMove() if didMove()
 
 
 
