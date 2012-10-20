@@ -4,7 +4,11 @@ block main
   div#login
     span Username
     br
-    input(type="text")
-    button(type="button") Join
+    input#name(type="text")
+    button#join(type="button") Join
 
-  div#messageList
+  div#messages
+    input#msg(type="text")
+    button#send(type="button") Send
+    br
+    div#messageList
