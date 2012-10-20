@@ -5,6 +5,7 @@ server = require('http').createServer app
 io = require('socket.io').listen server
 stylus = require 'stylus'
 nib = require 'nib'
+jquery = require 'express-jquery'
 coffeeware = require './coffeeware'
 routes = require './routes'
 application = require './application'
@@ -12,6 +13,7 @@ application = require './application'
 app.set 'views', __dirname + '/views'
 app.set 'view engine', 'jade'
 app.set 'view options', { layout: false } 
+app.use jquery '/jquery-1.8.2.min.js'
 app.use coffeeware __dirname + '/public' 
 app.use stylus.middleware { src: __dirname + '/public', compile: (str, path) -> stylus(str).set('filename', path).use nib() }
 app.use express.bodyParser()

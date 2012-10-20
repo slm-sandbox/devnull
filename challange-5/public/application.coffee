@@ -4,6 +4,7 @@ player = null;
 join = (player)->
   socket.emit 'join', player
   show player
+  join = ->
 
 $(document).on 'keydown', (e) ->
 
@@ -22,7 +23,7 @@ $(document).on 'keydown', (e) ->
 show = (player)->
   canvas = document.createElement 'canvas'
   $(canvas).addClass player
-  document.appendChild canvas
+  document.body.appendChild canvas
   ctx = canvas.getContext '2d'
 
   socket.on 'state', (s)->
