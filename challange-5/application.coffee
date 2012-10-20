@@ -1,7 +1,5 @@
 module.exports = (io) ->
   
-  console.log('application loaded')
-
   state =
     left: 50
     right: 50
