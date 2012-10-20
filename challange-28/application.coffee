@@ -8,19 +8,27 @@ module.exports = (io) ->
 
     user = 0
     computer = 0
+    moves = 0
 
     X = 1
     O = 2
 
     doMove = ->
+      if moves is 9
+        socket.emit 'winner', 0
+        return
       x = Math.floor Math.random() * 3
       y = Math.floor Math.random() * 3
       until board[y][x] is 0
         x = (++x % 3)
         y = (++y % 3) if x is 0
       board[y][x] = computer
+      moves++
       socket.emit 'board', board
       socket.emit 'winner', w unless (w = anyWinner) is 0
+      if moves is 9
+        socket.emit 'winner', 0
+        return
 
     anyWinner = ->
       #Horizontal
@@ -44,6 +52,7 @@ module.exports = (io) ->
     socket.on 'place', (x, y)->
       return unless board[y][x] is 0
       board[y][x] = user
+      moves++
       doMove()
 
 
